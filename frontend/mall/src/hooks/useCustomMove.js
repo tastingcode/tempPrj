@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {createSearchParams, useNavigate, useSearchParams} from "react-router";
 
 const getNum = (param, defaultValue) => {
@@ -11,6 +12,8 @@ const getNum = (param, defaultValue) => {
 const useCustomMove = () => {
     const navigate = useNavigate();
 
+    const [refresh, setRefresh] = useState(false);
+
     const [queryParams] = useSearchParams();
 
     const page = getNum(queryParams.get('page'), 1);
@@ -21,28 +24,37 @@ const useCustomMove = () => {
     const moveToList = (pageParam) => {
         let queryStr = "";
 
-        if (pageParam){
+        if (pageParam) {
             const pageNum = getNum(pageParam.page, 1)
             const sizeNum = getNum(pageParam.size, 10)
 
-            queryStr = createSearchParams({page: pageNum, size:sizeNum}).toString()
-        }{
-            queryStr = queryDefault
+            queryStr = createSearchParams({page: pageNum, size: sizeNum}).toString();
+        } else {
+            queryStr = queryDefault;
         }
 
-        navigate({pathname: `../list`, search:queryStr})
+        setRefresh(!refresh);
+        navigate({pathname: `../list`, search: queryStr});
     }
 
     const moveToModify = (num) => {
-        console.log(queryDefault)
 
         navigate({
-            pathname:`../modify/${num}`,
-            search:queryDefault
+            pathname: `../modify/${num}`,
+            search: queryDefault
         })
     }
 
-    return {moveToList, moveToModify, page, size}
+    const moveToRead = (num) => {
+        console.log(queryDefault);
+
+        navigate({
+            pathname: `../read/${num}`,
+            search: queryDefault
+        })
+    }
+
+    return {moveToList, moveToModify, moveToRead, page, size, refresh}
 }
 
 export default useCustomMove
