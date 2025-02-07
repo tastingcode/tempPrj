@@ -472,9 +472,8 @@ const ModifyComponent = ({tno, moveList, moveRead}) => {
             setResult('Modified')
         })
     }
-
+                                                                                                                                                                                   ff
     const handleClickDelete = () => { //버튼 클릭시
-
         deleteOne(tno).then( data => {
             console.log("delete result: " + data)
             setResult('Deleted')
