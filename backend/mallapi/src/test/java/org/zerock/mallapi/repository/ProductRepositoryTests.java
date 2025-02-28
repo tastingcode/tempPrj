@@ -4,8 +4,11 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 import org.zerock.mallapi.domain.Product;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
@@ -33,4 +36,17 @@ public class ProductRepositoryTests {
             log.info("------------------------------");
         }
     }
+
+    @Transactional
+    @Test
+    public void testRead(){
+        Long pno = 1L;
+
+        Optional<Product> result = productRepository.findById(pno);
+        Product product = result.orElseThrow();
+
+        log.info("Product : " + product);
+        log.info("product.getImageList() : " + product.getImageList());
+    }
+
 }
