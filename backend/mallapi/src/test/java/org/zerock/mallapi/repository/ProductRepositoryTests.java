@@ -4,10 +4,15 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.zerock.mallapi.domain.Product;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,14 +44,68 @@ public class ProductRepositoryTests {
 
     @Transactional
     @Test
-    public void testRead(){
+    public void testRead() {
         Long pno = 1L;
 
         Optional<Product> result = productRepository.findById(pno);
         Product product = result.orElseThrow();
 
-        log.info("Product : " + product);
+        log.info("product : " + product);
         log.info("product.getImageList() : " + product.getImageList());
+    }
+
+    @Test
+    public void testRead2() {
+        Long pno = 1L;
+
+        Optional<Product> result = productRepository.selectOne(pno);
+
+        Product product = result.orElseThrow();
+
+        log.info("product : " + product);
+        log.info("product.getImageList() : " + product.getImageList());
+    }
+
+    @Commit
+    @Transactional
+    @Test
+    public void testDelete(){
+        Long pno = 2L;
+        productRepository.updateToDelete(pno, true);
+    }
+
+    @Test
+    public void testUpdate() {
+
+        Long pno = 10L;
+
+        Product product = productRepository.selectOne(pno).get();
+
+        product.changeName("10번 상품");
+        product.changeDesc("10번 상품 설명입니다.");
+        product.changePrice(5000);
+
+        //첨부파일 수정
+        product.clearList();
+
+        product.addImageString(UUID.randomUUID().toString() + "_" + "NEWIMAGE1.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "NEWIMAGE2.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "NEWIMAGE3.jpg");
+
+        productRepository.save(product);
+
+    }
+
+    @Test
+    public void testList(){
+
+        //org.springframework.data.domain 패키지
+        PageRequest pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
+
+        Page<Object[]> result = productRepository.selectList(pageable);
+
+        //java.util
+        result.getContent().forEach(arr -> log.info(Arrays.toString(arr)));
     }
 
 }
