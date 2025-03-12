@@ -108,4 +108,6 @@ public class ProductRepositoryTests {
         result.getContent().forEach(arr -> log.info(Arrays.toString(arr)));
     }
 
+
+
 }
