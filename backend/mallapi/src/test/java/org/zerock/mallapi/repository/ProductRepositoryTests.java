@@ -39,6 +39,7 @@ public class ProductRepositoryTests {
             productRepository.save(product);
 
             log.info("------------------------------");
+            log.info("------------------------------");
         }
     }
 
