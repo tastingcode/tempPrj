@@ -99,4 +99,11 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+    @Override
+    public Product get(Long pno) {
+        Optional<Product> result = productRepository.selectOne(pno);
+        Product product = result.orElseThrow();
+
+        return null;
+    }
 }
