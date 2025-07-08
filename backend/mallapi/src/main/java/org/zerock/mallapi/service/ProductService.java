@@ -1,6 +1,7 @@
 package org.zerock.mallapi.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.zerock.mallapi.domain.Product;
 import org.zerock.mallapi.dto.PageRequestDTO;
 import org.zerock.mallapi.dto.PageResponseDTO;
 import org.zerock.mallapi.dto.ProductDTO;
@@ -11,5 +12,7 @@ public interface ProductService {
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO);
 
     Long register(ProductDTO productDTO);
+
+    Product get(Long pno);
 
 }

@@ -33,8 +33,8 @@ public class ProductServiceTests {
     @Test
     public void testRegister() {
         ProductDTO productDTO = ProductDTO.builder()
-                .pname("새로운 상품")
-                .pdesc("신규 추가 상품입니다.")
+                .pname("새로운 상품 등록 테스트")
+                .pdesc("신규 추가 상품입니다. 테스트")
                 .price(1000)
                 .build();
 
