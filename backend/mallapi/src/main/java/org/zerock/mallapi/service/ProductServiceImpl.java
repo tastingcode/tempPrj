@@ -100,10 +100,66 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product get(Long pno) {
+    public ProductDTO get(Long pno) {
         Optional<Product> result = productRepository.selectOne(pno);
         Product product = result.orElseThrow();
+        ProductDTO productDTO = entityToDTO(product);
 
-        return null;
+        return productDTO;
+    }
+
+    @Override
+    public void modify(ProductDTO productDTO) {
+
+        //step1 read
+        Optional<Product> result = productRepository.findById(productDTO.getPno());
+
+        Product product = result.orElseThrow();
+
+        //change pname, pdesc, price
+        product.changeName(productDTO.getPname());
+        product.changeDesc(productDTO.getPdesc());
+        product.changePrice(productDTO.getPrice());
+
+        //upload File -- clear first
+        product.clearList();
+
+        List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+        if(uploadFileNames != null && uploadFileNames.size() > 0 ){
+            uploadFileNames.stream().forEach(uploadName -> {
+                product.addImageString(uploadName);
+            });
+        }
+        productRepository.save(product);
+    }
+
+    @Override
+    public void remove(Long pno) {
+        productRepository.updateToDelete(pno, true);
+    }
+
+    private ProductDTO entityToDTO(Product product){
+
+        ProductDTO productDTO = ProductDTO.builder()
+                .pno(product.getPno())
+                .pname(product.getPname())
+                .pdesc(product.getPdesc())
+                .price(product.getPrice())
+                .delFlag(product.isDelFlag())
+                .build();
+
+        List<ProductImage> imageList = product.getImageList();
+
+        if(imageList == null || imageList.size() == 0 ){
+            return productDTO;
+        }
+
+        List<String> fileNameList = imageList.stream().map(productImage ->
+                productImage.getFileName()).toList();
+
+        productDTO.setUploadFileNames(fileNameList);
+
+        return productDTO;
     }
 }
