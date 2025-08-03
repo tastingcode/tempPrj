@@ -31,6 +31,8 @@ public class TodoServiceTests {
 
         Long tno = todoService.register(todoDTO);
         log.info("TNO: " + tno);
+        log.info("TNO: " + tno);
+        log.info("TNO: " + tno);
     }
 
     @Test
