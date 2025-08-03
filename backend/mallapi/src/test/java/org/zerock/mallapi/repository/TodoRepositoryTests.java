@@ -24,6 +24,8 @@ public class TodoRepositoryTests {
     public void test1() {
 
         log.info("--------------------");
+        log.info("--------------------");
+        log.info("--------------------");
         log.info(todoRepository);
 
     }
