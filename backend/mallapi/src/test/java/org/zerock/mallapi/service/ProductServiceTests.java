@@ -58,6 +58,8 @@ public class ProductServiceTests {
 
         log.info(productDTO);
         log.info(productDTO.getUploadFileNames());
+        log.info(productDTO.getUploadFileNames());
+        log.info(productDTO.getUploadFileNames());
 
     }
 
